@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 import NavigationBar from './components/NavigationBar'
 import Home from './components/Home'
+import Game from './pages/game'
 import './App.css'
 
 const theme = createTheme({
@@ -21,6 +22,7 @@ function App() {
       <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/game" element={<Game />} />
       </Routes>
     </ThemeProvider>
   )

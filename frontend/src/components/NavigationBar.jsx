@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import {
   AppBar,
@@ -9,14 +10,14 @@ import {
   IconButton,
   Menu,
   MenuItem,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Menu as MenuIcon,
   Home,
   Games,
   Leaderboard,
   Settings,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const NavigationBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -31,52 +32,56 @@ const NavigationBar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#1976d2' }}>
+    <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
       <Toolbar>
         {/* Logo/Brand */}
         <Typography
           variant="h6"
           component="div"
-          sx={{ 
+          sx={{
             flexGrow: 1,
-            fontWeight: 'bold',
-            fontSize: '1.5rem'
+            fontWeight: "bold",
+            fontSize: "1.5rem",
           }}
         >
           Word Game
         </Typography>
 
         {/* Desktop Navigation */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
-          <Button
-            color="inherit"
-            startIcon={<Home />}
-            sx={{ 
-              '&:hover': { 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)' 
-              }
-            }}
-          >
-            Home
-          </Button>
-          <Button
-            color="inherit"
-            startIcon={<Games />}
-            sx={{ 
-              '&:hover': { 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)' 
-              }
-            }}
-          >
-            Play Game
-          </Button>
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+          <Link to="/">
+            <Button
+              color="inherit"
+              startIcon={<Home />}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+            >
+              Home
+            </Button>
+          </Link>
+          <Link to="/game">
+            <Button
+              color="inherit"
+              startIcon={<Games />}
+              sx={{
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+            >
+              Play Game
+            </Button>
+          </Link>
           <Button
             color="inherit"
             startIcon={<Leaderboard />}
-            sx={{ 
-              '&:hover': { 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)' 
-              }
+            sx={{
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
             }}
           >
             Leaderboard
@@ -84,10 +89,10 @@ const NavigationBar = () => {
           <Button
             color="inherit"
             startIcon={<Settings />}
-            sx={{ 
-              '&:hover': { 
-                backgroundColor: 'rgba(255, 255, 255, 0.1)' 
-              }
+            sx={{
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
             }}
           >
             Settings
@@ -95,11 +100,11 @@ const NavigationBar = () => {
         </Box>
 
         {/* Mobile Menu */}
-        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
           <IconButton
             size="large"
             aria-label="menu"
-            aria-controls={open ? 'mobile-menu' : undefined}
+            aria-controls={open ? "mobile-menu" : undefined}
             aria-haspopup="true"
             onClick={handleMenuClick}
             color="inherit"
@@ -112,13 +117,13 @@ const NavigationBar = () => {
             open={open}
             onClose={handleMenuClose}
             MenuListProps={{
-              'aria-labelledby': 'menu-button',
+              "aria-labelledby": "menu-button",
             }}
             sx={{
-              '& .MuiPaper-root': {
-                backgroundColor: '#1976d2',
-                color: 'white',
-              }
+              "& .MuiPaper-root": {
+                backgroundColor: "#1976d2",
+                color: "white",
+              },
             }}
           >
             <MenuItem onClick={handleMenuClose}>

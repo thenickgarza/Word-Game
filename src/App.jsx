@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { Routes, Route } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 import NavigationBar from './components/NavigationBar'
 import Home from './components/Home'
@@ -14,13 +14,14 @@ const theme = createTheme({
 })
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <NavigationBar />
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </ThemeProvider>
   )
 }

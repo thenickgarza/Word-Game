@@ -6,28 +6,61 @@ import OpenAI from "openai";
 dotenv.config();
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const completion = await openai.chat.completions.create({
+app.use(cors());
+app.use(express.json());
+
+const generateSentence = async (word) => {
+  try {
+  const sentence = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
-        content: `Generate a simple sentence that uses the word "fire" in a natural way for a word guessing game. Make it appropriate for easy difficulty.`
-      }
-    ]
+        content: `Generate a simple sentence that uses the word "${word}" in a natural way for a word guessing game. 
+        Make it appropriate for easy difficulty and children. If you can add humor that would be awesome.. if you use 
+        the word multiple times that would be ok too`,
+      },
+    ],
   });
 
-console.log(completion.choices[0].message.content);
+  return sentence.choices[0].message.content;
+} catch (error) {
+  console.error("error generating sentence:", error);
+  throw error;
+}
+};
 
-app.use(cors())
-app.use(express.json())
+app.post("/generate-sentence", async (req, res) => {
+  try {
+    const { word } = req.body;
+    const sentence = await generateSentence(word);
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    const audioSentence = await openai.audio.speech.create({
+      model: "tts-1-hd",
+      voice: "alloy",
+      input: sentence,
+    });
+
+    const buffer = Buffer.from(await audioSentence.arrayBuffer());
+    // res.json({ buffer });
+    // console.log(buffer);
+    res.send({
+      audioBuffer: buffer,
+      sentence: sentence,
+    });
+    console.log("success generating sentence(s):", sentence);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "Failed to generate sentence" })
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

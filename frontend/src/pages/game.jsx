@@ -1,5 +1,6 @@
 import { Container, Typography, Box, Button, Stack } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import GamePlay from "../components/GamePlay";
 
 const words = ["too", "fire", "belly", "beast", "cherry", "fig", "grape"];
 
@@ -21,44 +22,40 @@ export default function Game() {
         gap={3}
       >
         {gameStart ? (
-          <>
-          
-          </>
+          <GamePlay />
         ) : (
-          
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={2}
-              sx={{ width: "100%", maxWidth: 600 }}
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            sx={{ width: "100%", maxWidth: 600 }}
+          >
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => setGameStart(true)}
+              fullWidth
+              sx={{
+                py: 1.5,
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+              }}
             >
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => setGameStart(true)}
-                fullWidth
-                sx={{
-                  py: 1.5,
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                }}
-              >
-                Let's Play
-              </Button>
+              Let's Play
+            </Button>
 
-              <Button
-                variant="outlined"
-                size="large"
-                fullWidth
-                sx={{
-                  py: 1.5,
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                }}
-              >
-                Exit
-              </Button>
-            </Stack>
-          
+            <Button
+              variant="outlined"
+              size="large"
+              fullWidth
+              sx={{
+                py: 1.5,
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+              }}
+            >
+              Exit
+            </Button>
+          </Stack>
         )}
       </Box>
     </Container>

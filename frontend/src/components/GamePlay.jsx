@@ -1,19 +1,36 @@
 import { Container, Box, Stack, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const words = ["too", "fire", "belly", "beast", "cherry", "fig", "grape"];
 
 export default function GamePlay() {
-  const [word, setWord] = useState(
-    words[Math.floor(Math.random() * words.length)]
-  );
-
+  // Get a random word from the words array
+  const [word, setWord] = useState(words[Math.floor(Math.random() * words.length)]);
+  // Sentence state
   const [sentence, setSentence] = useState("");
   const [audioUrl, setAudioUrl] = useState(null);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
+  // Listen to word state
+  const [hearWord, setHearWord] = useState(null);
+  const [wordAudioLoading, setWordAudioLoading] = useState(false);
+
+  const generateAudioWord = async () => {
+    setWordAudioLoading(true);
+    
+    // Use browser's Speech Synthesis API
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.rate = 0.8; // Slightly slower speech
+    utterance.pitch = 1; // Normal pitch
+    utterance.volume = 1; // Full volume
+    // Play the audio
+    speechSynthesis.speak(utterance);
+    
+    setWordAudioLoading(false);
+  }
 
   const generateSentence = async () => {
     setIsAudioLoading(true);
+    
     try {
       const response = await fetch("http://localhost:3000/generate-sentence", {
         method: "POST",
@@ -34,16 +51,12 @@ export default function GamePlay() {
       }
       
     } catch (error) {
-      console.error("error generating sentence:", error);
+      console.error("Error generating sentence:", error);
       throw error;
     } finally {
       setIsAudioLoading(false);
     }
   };
-
-  useEffect(() => {
-    generateSentence();
-  }, [word]);
 
   return (
     <Container maxWidth="md" minHeight="100vh">
@@ -54,18 +67,40 @@ export default function GamePlay() {
         justifyContent="center"
       >
         <Stack direction="row" spacing={2}>
-          <Button onClick={generateSentence} variant="contained" size="large">
-            Hear it in a sentence
+         {/* Button to hear the word in a sentence */}
+          <Button 
+            onClick={isAudioLoading ? () => {console.log("Audio is loading")} : generateSentence} 
+            variant="contained" 
+            size="large"
+            sx={{ 
+              opacity: isAudioLoading ? 0.7 : 1,
+            }}
+          >
+            {isAudioLoading ? (
+              "🔄 Generating Audio..."
+            ) : audioUrl ? (
+              <audio
+                src={audioUrl}
+                onError={(e) => console.error("Audio error:", e.target.error)}
+                onLoadStart={() => console.log("Audio loading started")}
+                onCanPlay={() => console.log("Audio can play")}
+                controls
+              />
+            ) : (
+              "Hear it in a sentence"
+            )}
           </Button>
-          <Button variant="contained" size="large">
-            <audio
-              src={audioUrl}
-              onError={(e) => console.error("Audio error:", e.target.error)}
-              onLoadStart={() => console.log("Audio loading started")}
-              onCanPlay={() => console.log("Audio can play")}
-              controls
-            />
-          </Button>
+           {/* Button to hear the word by itself */}
+           <Button
+           onClick={wordAudioLoading ? undefined : generateAudioWord}
+           variant="contained"
+           size="large"
+           sx={{
+             opacity: wordAudioLoading ? 0.7 : 1,
+           }}
+           >
+             {wordAudioLoading ? "🔊 Speaking..." : "Hear the word by itself"}
+           </Button>
         </Stack>
       </Box>
     </Container>

@@ -38,7 +38,7 @@ const generateSentence = async (word) => {
 
 app.post("/generate-sentence", async (req, res) => {
   try {
-    const { word } = req.body;
+    const { word }  = req.body;
     const sentence = await generateSentence(word);
 
     const audioSentence = await openai.audio.speech.create({

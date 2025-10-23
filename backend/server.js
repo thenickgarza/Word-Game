@@ -47,11 +47,11 @@ app.post("/generate-sentence", async (req, res) => {
       input: sentence,
     });
 
-    const buffer = Buffer.from(await audioSentence.arrayBuffer());
-    // res.json({ buffer });
-    // console.log(buffer);
-    res.send({
-      audioBuffer: buffer,
+    const arrayBuffer = await audioSentence.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    res.json({
+      audioBuffer: Array.from(uint8Array),
       sentence: sentence,
     });
     console.log("success generating sentence(s):", sentence);

@@ -8,31 +8,42 @@ export default function GamePlay() {
     words[Math.floor(Math.random() * words.length)]
   );
 
-  
-    const generateSentence = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/generate-sentence",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ word }),
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-        return data;
-      } catch (error) {
-        console.error("error generating sentence:", error);
-        throw error;
-      }
-    };
+  const [sentence, setSentence] = useState("");
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
 
-    useEffect(() => {
-        generateSentence();
-    }, [word]);
+  const generateSentence = async () => {
+    setIsAudioLoading(true);
+    try {
+      const response = await fetch("http://localhost:3000/generate-sentence", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ word }),
+      });
+      const data = await response.json();
+
+      if (data.audioBuffer) {
+        const uint8Array = new Uint8Array(data.audioBuffer);
+        const audioBlob = new Blob([uint8Array], { type: "audio/mpeg" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        
+        setAudioUrl(audioUrl);
+        setSentence(data.sentence);
+      }
+      
+    } catch (error) {
+      console.error("error generating sentence:", error);
+      throw error;
+    } finally {
+      setIsAudioLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    generateSentence();
+  }, [word]);
 
   return (
     <Container maxWidth="md" minHeight="100vh">
@@ -47,6 +58,13 @@ export default function GamePlay() {
             Hear it in a sentence
           </Button>
           <Button variant="contained" size="large">
+            <audio
+              src={audioUrl}
+              onError={(e) => console.error("Audio error:", e.target.error)}
+              onLoadStart={() => console.log("Audio loading started")}
+              onCanPlay={() => console.log("Audio can play")}
+              controls
+            />
           </Button>
         </Stack>
       </Box>

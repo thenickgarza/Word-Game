@@ -1,7 +1,7 @@
 import { Container, Box, Stack, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
-const words = ["too", "fire", "belly", "beast", "cherry", "fig", "grape"];
+const words = ["bundle", "horrible", "puzzle", "visible", "sprinkle", "tackle", "multiple", "article", "gurgle", "possible"];
 
 export default function GamePlay() {
   // Get a random word from the words array
@@ -33,10 +33,12 @@ export default function GamePlay() {
       setWordAudioLoading(false);
       setHearWord(null);
       console.log("Correct guess!");
+      alert("Correct guess!");
       // other options to handle if correct
     } else {
       // do somehting if wrong.
       console.log("Incorrect guess!");
+      alert("Incorrect guess!");
     }
   };
 

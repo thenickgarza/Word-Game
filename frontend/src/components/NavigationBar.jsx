@@ -86,6 +86,7 @@ const NavigationBar = () => {
           >
             Leaderboard
           </Button>
+          <Link to="/settings">
           <Button
             color="inherit"
             startIcon={<Settings />}
@@ -97,6 +98,7 @@ const NavigationBar = () => {
           >
             Settings
           </Button>
+          </Link>
         </Box>
 
         {/* Mobile Menu */}

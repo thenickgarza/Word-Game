@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import NavigationBar from './components/NavigationBar'
 import Home from './components/Home'
 import Game from './pages/game'
+import Settings from './pages/settings'
 import './App.css'
 
 const theme = createTheme({
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </ThemeProvider>
   )

@@ -1,13 +1,15 @@
 import { Container, Box, Stack, Button, TextField } from "@mui/material";
 import { useState } from "react";
-
-const words = ["bundle", "horrible", "puzzle", "visible", "sprinkle", "tackle", "multiple", "article", "gurgle", "possible"];
+import { useWordContext } from '../contexts/WordContext';
 
 export default function GamePlay() {
+  const { words } = useWordContext();
+  
   // Get a random word from the words array
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
   );
+  // const { words } = useWordContext();
   // Current word index
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   let currentWord = words[currentWordIndex];

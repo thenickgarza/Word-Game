@@ -6,6 +6,7 @@ import Home from './components/Home'
 import Game from './pages/game'
 import Settings from './pages/settings'
 import './App.css'
+import { WordProvider } from './contexts/WordContext'
 
 const theme = createTheme({
   palette: {
@@ -16,17 +17,18 @@ const theme = createTheme({
 })
 
 function App() {
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <NavigationBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-    </ThemeProvider>
+    <WordProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <NavigationBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/game" element={<Game />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </ThemeProvider>
+    </WordProvider>
   )
 }
 

@@ -24,38 +24,40 @@ export default function Game() {
         {gameStart ? (
           <GamePlay />
         ) : (
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            spacing={2}
-            sx={{ width: "100%", maxWidth: 600 }}
-          >
-            <Button
-              variant="contained"
-              size="large"
-              onClick={() => setGameStart(true)}
-              fullWidth
-              sx={{
-                py: 1.5,
-                fontSize: "1.1rem",
-                fontWeight: "bold",
-              }}
+          <>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              sx={{ width: "100%", maxWidth: 600 }}
             >
-              Let's Play
-            </Button>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => setGameStart(true)}
+                fullWidth
+                sx={{
+                  py: 1.5,
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Let's Play
+              </Button>
 
-            <Button
-              variant="outlined"
-              size="large"
-              fullWidth
-              sx={{
-                py: 1.5,
-                fontSize: "1.1rem",
-                fontWeight: "bold",
-              }}
-            >
-              Exit
-            </Button>
-          </Stack>
+              <Button
+                variant="outlined"
+                size="large"
+                fullWidth
+                sx={{
+                  py: 1.5,
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                }}
+              >
+                Exit
+              </Button>
+            </Stack>
+          </>
         )}
       </Box>
     </Container>

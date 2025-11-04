@@ -1,10 +1,19 @@
-import { Container, Box, Stack, Button, TextField } from "@mui/material";
+import {
+  Container,
+  Box,
+  Stack,
+  Button,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
-import { useWordContext } from '../contexts/WordContext';
+import { useWordContext } from "../contexts/WordContext";
 
 export default function GamePlay() {
+  const userName = localStorage.getItem("user_name");
+  console.log(userName);
   const { words } = useWordContext();
-  
+
   // Get a random word from the words array
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
@@ -18,10 +27,11 @@ export default function GamePlay() {
   const [audioUrl, setAudioUrl] = useState(null);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   // Listen to word state
-  const [hearWord, setHearWord] = useState(null);
   const [wordAudioLoading, setWordAudioLoading] = useState(false);
   // Word submission state
   const [wordSubmission, setWordSubmission] = useState("");
+
+  const [isHearWordActive, setIsHearWordActive] = useState(false);
 
   const handleNextWord = () => {
     if (wordSubmission.toLowerCase() === currentWord.toLowerCase()) {
@@ -33,7 +43,6 @@ export default function GamePlay() {
       setAudioUrl(null);
       setIsAudioLoading(false);
       setWordAudioLoading(false);
-      setHearWord(null);
       console.log("Correct guess!");
       alert("Correct guess!");
       // other options to handle if correct
@@ -56,6 +65,7 @@ export default function GamePlay() {
     speechSynthesis.speak(utterance);
 
     setWordAudioLoading(false);
+    setIsHearWordActive(true);
   };
 
   const generateSentence = async () => {
@@ -67,7 +77,7 @@ export default function GamePlay() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ word: currentWord})
+        body: JSON.stringify({ word: currentWord }),
       });
       const data = await response.json();
 
@@ -100,95 +110,94 @@ export default function GamePlay() {
           <TextField
             label="Type your guess"
             type="text"
-            
             variant="outlined"
             placeholder="Enter your guess"
             value={wordSubmission}
             onChange={(e) => setWordSubmission(e.target.value)}
             onKeyPress={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleNextWord();
               }
             }}
-            sx={{ 
+            sx={{
               minWidth: 300,
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: '#333',
-                '& fieldset': {
-                  borderColor: '#1976d2',
-                  borderWidth: '2px',
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "#333",
+                "& fieldset": {
+                  borderColor: "#1976d2",
+                  borderWidth: "2px",
                 },
-                '&:hover fieldset': {
-                  borderColor: '#1976d2',
-                  borderWidth: '2px',
+                "&:hover fieldset": {
+                  borderColor: "#1976d2",
+                  borderWidth: "2px",
                 },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#1976d2',
-                  borderWidth: '2px',
+                "&.Mui-focused fieldset": {
+                  borderColor: "#1976d2",
+                  borderWidth: "2px",
                 },
               },
-              '& .MuiInputLabel-root': {
-                color: '#1976d2',
+              "& .MuiInputLabel-root": {
+                color: "#1976d2",
               },
-              '& .MuiInputLabel-root.Mui-focused': {
-                color: '#1976d2',
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "#1976d2",
               },
-              '& .MuiOutlinedInput-input': {
-                color: 'white',
-              }
+              "& .MuiOutlinedInput-input": {
+                color: "white",
+              },
             }}
           />
-          <Button
-            onClick={handleNextWord}
-            variant="contained"
-            size="large"
-          >
+          <Button onClick={handleNextWord} variant="contained" size="large">
             Submit Guess
           </Button>
         </Stack>
 
         {/* Audio buttons */}
         <Stack direction="row" spacing={2}>
-          {/* Button to hear the word in a sentence */}
-          <Button
-            onClick={
-              isAudioLoading
-                ? () => {
-                    console.log("Audio is loading");
-                  }
-                : generateSentence
-            }
-            variant="contained"
-            size="large"
-            sx={{
-              opacity: isAudioLoading ? 0.7 : 1,
-            }}
-          >
-            {isAudioLoading ? (
-              "🔄 Generating Audio..."
-            ) : audioUrl ? (
-              <audio
-                src={audioUrl}
-                onError={(e) => console.error("Audio error:", e.target.error)}
-                onLoadStart={() => console.log("Audio loading started")}
-                onCanPlay={() => console.log("Audio can play")}
-                controls
-              />
-            ) : (
-              "Hear it in a sentence"
-            )}
-          </Button>
           {/* Button to hear the word by itself */}
           <Button
             onClick={wordAudioLoading ? undefined : generateAudioWord}
             variant="contained"
             size="large"
+            status={isHearWordActive ? "active" : "inactive"}
             sx={{
               opacity: wordAudioLoading ? 0.7 : 1,
             }}
           >
             {wordAudioLoading ? "🔊 Speaking..." : "Hear the word by itself"}
           </Button>
+          {isHearWordActive ? (
+          <Button
+          onClick={
+            isAudioLoading
+              ? () => {
+                  console.log("Audio is loading");
+                }
+              : generateSentence
+          }
+          variant="contained"
+          size="large"
+          sx={{
+            opacity: isAudioLoading ? 0.7 : 1,
+          }}
+        >
+          {isAudioLoading ? (
+            "🔄 Generating Audio..."
+          ) : audioUrl ? (
+            <audio
+              src={audioUrl}
+              onError={(e) => console.error("Audio error:", e.target.error)}
+              onLoadStart={() => console.log("Audio loading started")}
+              onCanPlay={() => console.log("Audio can play")}
+              controls
+            />
+          ) : (
+            "Hear it in a sentence"
+          )}
+        </Button>
+          ) : (
+            null
+          )}
         </Stack>
       </Box>
     </Container>

@@ -5,6 +5,7 @@ import NavigationBar from './components/NavigationBar'
 import Home from './components/Home'
 import Game from './pages/game'
 import Settings from './pages/settings'
+import Asteroids from './pages/asteroids'
 import './App.css'
 import { WordProvider } from './contexts/WordContext'
 
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/game" element={<Game />} />
+          <Route path="/asteroids" element={<Asteroids />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </ThemeProvider>

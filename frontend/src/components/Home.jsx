@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
-
   const handleNameChange = (e) => {
     setName(e.target.value);
   };

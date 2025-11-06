@@ -6,14 +6,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
 import { useState } from "react";
 import { useWordContext } from "../contexts/WordContext";
+import { useNavigate } from "react-router-dom";
 
 export default function GamePlay() {
   const userName = localStorage.getItem("user_name");
+  const navigate = useNavigate();
   console.log(userName);
   const { words } = useWordContext();
-
   // Get a random word from the words array
   const [word, setWord] = useState(
     words[Math.floor(Math.random() * words.length)]
@@ -30,10 +32,16 @@ export default function GamePlay() {
   const [wordAudioLoading, setWordAudioLoading] = useState(false);
   // Word submission state
   const [wordSubmission, setWordSubmission] = useState("");
-
   const [isHearWordActive, setIsHearWordActive] = useState(false);
+  const [score, setScore] = useState(0)
+
+  const handleAsteroidsUnlock = () => {
+    alert("Time to play asteroids!");
+    navigate("/asteroids");
+  };
 
   const handleNextWord = () => {
+    // check if the word is correct
     if (wordSubmission.toLowerCase() === currentWord.toLowerCase()) {
       setCurrentWordIndex((prev) => prev + 1);
       currentWord = words[currentWordIndex];
@@ -44,12 +52,16 @@ export default function GamePlay() {
       setIsAudioLoading(false);
       setWordAudioLoading(false);
       console.log("Correct guess!");
-      alert("Correct guess!");
+      const newScore = score + 1;
+      setScore(newScore);
+      alert("Correct guess! Score: " + newScore);
+      newScore == 10 ? handleAsteroidsUnlock() : null;
       // other options to handle if correct
     } else {
-      // do somehting if wrong.
+      // do somehting if answer is wrong.
       console.log("Incorrect guess!");
-      alert("Incorrect guess!");
+      alert("Incorrect guess! Score: " + score);
+      setScore(prev => prev - 1);
     }
   };
 
